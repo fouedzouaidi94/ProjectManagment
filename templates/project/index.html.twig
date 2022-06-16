@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project index{% endblock %}
+
+{% block body %}
+    <h1>Project index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                {# <th>Id</th> #}
+                <th>Title</th>
+                <th>Description</th>
+                <th>Etat</th>
+                <th>Membres</th>
+                <th>Taches</th>
+                <th>actions</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+        {% for project in projects %}
+            <tr>
+                {# <td>{{ project.id }}</td> #}
+                <td>{{ project.title }}</td>
+                <td>{{ project.description }}</td>
+                <td>{{ project.state }}</td>
+               
+                {% for user in project.users %}
+                <td>{{ user.firstName }},</td>
+                {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+                {% endfor %}
+                {% for task in project.tasks %}
+                    <td>{{ task.title }},</td>
+                {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+                {% endfor %}
+                 <td>
+                    <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
+                        {% if (AdminOrNot)%}
+                            <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+                        {% endif %}
+                    
+                </td>
+   
+            </tr>
+            
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+           
+        </tbody>
+    </table>
+
+    {% if (AdminOrNot)%}
+        <a href="{{ path('project_new') }}">Create new</a>
+    {% endif %}
+    
+    <a href="{{ path('home_page') }}">Index</a>
+{% endblock %}
